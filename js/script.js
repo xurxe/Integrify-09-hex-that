@@ -2,27 +2,48 @@ const main = document.querySelector('main');
 const colorInput = document.querySelector('#colorInput');
 const hexInput = document.querySelector('#hexInput');
 const hexes = [
-    "the patriarchy",
-    "racism",
-    "climate change",
-    "Donald Trump",
-    "boredom",
-    "xenophobia",
-    "the haters",
-    "compulsory heterosexuality",
-    "nazis",
-    "facists",
-    "child molesters",
-    "pollution",
-    "transphobia",
-    "homophobes",
-    "wars",
-    "oppression",
-    "animal abusers",
+    'animal abusers',
+    'boredom',
+    'bigotry',
+    'colonialism',
+    'compulsory heterosexuality',
+    'child molesters',
+    'chronic pain',
+    'climate change',
+    'death',
+    'deforestation',
+    'depression',
+    'diet culture',
+    'disease',
+    'Donald Trump',
+    'facists',
+    'fossil fuels',
+    'global warming',
+    'homophobes',
+    'institutionalized racism',
+    'loneliness',
+    'mass extinction',
+    'mental health stigma',
+    'misery',
+    'nazis',
+    'oppression',
+    'pervasive ableism',
+    'pollution',
+    'poverty',
+    'sexism',
+    'soil erosion',
+    'the haters',
+    'the patriarchy',
+    'transmisogyny',
+    'transphobia',
+    'trauma',
+    'wars',
+    'white supremacy',
+    'xenophobia',
 ];
 
 
-
+// generate random hex code
 function generateRandomColor() {
     let randomColor = '#' + Math.random().toString(16).substr(2, 6).toUpperCase();
     return randomColor;
@@ -30,21 +51,26 @@ function generateRandomColor() {
 
 
 
+// convert hex code to RGB
 function hexToRgb(hexcode) {
+    // two digits for each (R, G, B)
     let rawR = hexcode.slice(1,3);
     let rawG = hexcode.slice(3,5);
     let rawB = hexcode.slice(5,7);
 
+    // convert to integer (0-255)
     let R = parseInt(rawR, 16);
     let G = parseInt(rawG, 16);
     let B = parseInt(rawB, 16);
 
+    // generate array with values
     let rgb = [R, G, B];
     return rgb;
 };
 
 
 
+// format RGB array for CSS
 function formatRgb(array) {
     let rgb = `rgb(${array[0]}, ${array[1]}, ${array[2]})`;
     return rgb;
@@ -52,12 +78,15 @@ function formatRgb(array) {
 
 
 
+// convert RGB array to HSL array
 function rgbToHsl(array) {
     let [R, G, B] = array;
 
+    // get max and min from RGB values
     let rawMax = Math.max(R, G, B);
     let rawMin = Math.min(R, G, B);
 
+    // convert to 0-1 range
     let max = rawMax / 255;
     let min = rawMin / 255;
 
@@ -65,43 +94,52 @@ function rgbToHsl(array) {
 
     rawL = (max + min) / 2;
 
+    // if max and min are equal, it's an achromatic grey
     if (rawMax === rawMin) {
         rawS = 0;
         rawH = 0;
     }
 
+    // if L is below 50%, use this formula
     else if (rawL <= 0.5) {
         rawS = (max - min) / (max + min);
     }
     
+    // if L is over 50%, use this formula
     else if (rawL > 0.5) {
         rawS = (max - min) / (2 - max - min);
     };
 
+    // if the highest color value is red, use this formula
     if (rawMax == R) {
         rawH = (G - B) / (max - min);
     }
 
+    // if the highest color value is green, use this formula
     else if (rawMax == G) {
         rawH = 2 + (B - R) / (max - min);
     }
 
+    // if the highest color value is blue, use this formula
     else if (rawMax == B) {
         rawH = 4 + (R - G) / (max - min);
     };
 
-    let H;
+    let H, S, L;
     
+    // if raw H is negative, add 360
     if (rawH < 0) {
         H = Math.round(rawH + 360);
     }
 
+    // otherwise, round
     else {
         H = Math.round(rawH);
     }
 
-    let S = Math.round(rawS * 100);
-    let L = Math.round(rawL * 100);
+    // multiply by 100 and round
+    S = Math.round(rawS * 100);
+    L = Math.round(rawL * 100);
 
     let hsl = [H, S, L];
     return hsl;
@@ -109,6 +147,7 @@ function rgbToHsl(array) {
 
 
 
+// format HSL array for CSS
 function formatHsl(array) {
     let hsl = `hsl(${array[0]}, ${array[1]}%, ${array[2]}%)`;
     return hsl;
@@ -116,50 +155,45 @@ function formatHsl(array) {
 
 
 
-/* function pickContrastingFont(hexcode) {
-    let rgb = hexToRGB(hexcode);
-    console.log(rgb);
-    let rgbArray= rgb.match(/\d+/g);
-    let R = parseInt(rgbArray[0]);
-    let G = parseInt(rgbArray[1]);
-    let B = parseInt(rgbArray[2]);
+// pick a font color that has enough contrast with the background
+function pickContrastingFont(hexcode) {
 
-    let max = Math.max(R, G, B) / 255;
-    let min = Math.min(R, G, B) / 255;
+    // convert from hex to RGB
+    let backgroundRgb = hexToRgb(hexcode);
+    let backgroundR = backgroundRgb[0];
+    let backgroundG = backgroundRgb[1];
+    let backgroundB = backgroundRgb[2];
 
-    let rawL = (max + min) / 2;
-    if (rawL < 0.6) {
-        return 'white';
+    // calculate perceived brigthness with luma formula
+    brightness = 0.2126 * backgroundR + 0.7152 * backgroundG + 0.0722 * backgroundB;
+
+    // convert from RGB to HSL
+    let backgroundHsl = rgbToHsl(backgroundRgb);
+    let backgroundH = backgroundHsl[0];
+    let backgroundS = backgroundHsl[1];
+    let backgroundL = backgroundHsl[2];
+
+    // define variables for text H, S and L
+    let H, S, L;
+
+    // set complementary hue
+    H = backgroundH - 180;
+
+    if (H < 0) {
+        H += 360;
     }
 
-    else if (rawL >= 0.6) {
-        return 'black';
-    };
-}; */
-
-
-function pickContrastingFont(hexcode) {
-    let backgroundRgb = hexToRgb(hexcode);
-    let backgroundHsl = rgbToHsl(backgroundRgb);
-    console.log(hexcode, backgroundHsl);
-
-
-    let backgroundH = parseInt(backgroundHsl[0]);
-    let backgroundS = parseInt(backgroundHsl[1]);
-    let backgroundL = parseInt(backgroundHsl[2]);
-
-    let H, S, L;
-    H = backgroundH;
-    S = Math.round(backgroundS - backgroundS / 1.5);
+    S = backgroundS;
     
-    if (backgroundS + backgroundL < 90) {
-        L = 90;
+    if (brightness < 150) {
+        L = 95;
     }
 
     else {
-        L = 10;
-    }
-    
+        L = 5;
+    };
+        
+    // define result array
     hsl = [H, S, L];
 
     return hsl;
@@ -167,10 +201,10 @@ function pickContrastingFont(hexcode) {
 
 
 
-function pickRandomHex() {
-    i = Math.floor(Math.random() * (hexes.length - 1));
-    hex = hexes[i];
-    hexes.splice(i, 1);
+function pickRandomHex(i) {
+    j = Math.floor(Math.random() * (hexes.length - i));
+    hex = hexes[j];
+    hexes.splice(j, 1);
     hexes.push(hex);
     return hex;
 };
@@ -180,8 +214,16 @@ function pickRandomHex() {
 function generateDivs(number) {
     for (let i = 0; i < number; i++) {
         let colorDiv = document.createElement('div');
+        colorDiv.className = 'color-div';
         main.appendChild(colorDiv);
-        colorDiv.style.lineHeight = '50px';
+
+        let hexP = document.createElement('p');
+        hexP.className = 'hex-p';
+        colorDiv.appendChild(hexP);
+
+        let colorP = document.createElement('p');
+        colorP.className = 'color-p';
+        colorDiv.appendChild(colorP);
 
         let backgroundColor = generateRandomColor();
         colorDiv.style.background = backgroundColor;
@@ -189,8 +231,8 @@ function generateDivs(number) {
         let fontColor = formatHsl(pickContrastingFont(backgroundColor));
         colorDiv.style.color = fontColor;
 
-        hex = pickRandomHex();
-        colorDiv.textContent = `${backgroundColor}: Hex ${hex}!`;
+        hex = pickRandomHex(i);
+        hexP.textContent = `Hex ${hex}!`;
 
         console.log(fontColor);
 

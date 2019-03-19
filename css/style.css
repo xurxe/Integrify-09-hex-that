@@ -32,4 +32,10 @@ html {
 
 .color-div {
     display: flex;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.hex-p {
+    font-size: 1.8rem;
 }

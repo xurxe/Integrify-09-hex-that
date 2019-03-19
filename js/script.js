@@ -1,6 +1,7 @@
 const main = document.querySelector('main');
-const colorInput = document.querySelector('#colorInput');
-const hexInput = document.querySelector('#hexInput');
+const colorInput = document.querySelector('#color-input');
+const hexInput = document.querySelector('#hex-input');
+const generateButton = document.querySelector('#generate-button');
 const hexes = [
     'animal abusers',
     'boredom',
@@ -201,16 +202,27 @@ function pickContrastingFont(hexcode) {
 
 
 
+// pick a random element from the hexes array
 function pickRandomHex(i) {
+    // i will come from the i in the loop on generateDivs()
+    // j is a random index from the array, excluding the items already used and pushed at the end (see below)
     j = Math.floor(Math.random() * (hexes.length - i));
+
+    // pick a hex with the randomly-generated j index
     hex = hexes[j];
+
+    // remove that hex from the array
     hexes.splice(j, 1);
+
+    // add it at the end of the array
     hexes.push(hex);
+
     return hex;
 };
 
 
 
+// generate the given number of divs
 function generateDivs(number) {
     for (let i = 0; i < number; i++) {
         let colorDiv = document.createElement('div');
@@ -238,5 +250,34 @@ function generateDivs(number) {
 
     };
 };
+
+
+
+// remove previously-generated color divs
+function clearColorDivs() {
+
+    // select color divs
+    let colorDivs = document.querySelectorAll('.color-div');
+
+    // use a loop to delete them
+    for (let i = 0; i < colorDivs.length; i++) {
+        main.removeChild(colorDivs[i]);
+    };
+};
+
+
+
+// after clicking the generate button, do the following:
+generateButton.addEventListener('click', function() {
+
+    // get number of colors to be generated from the input field
+    const number = colorInput.value;
+
+    // remove previous color divs
+    clearColorDivs();
+
+    // generate new ones
+    generateDivs(number);
+});
 
 generateDivs(5);

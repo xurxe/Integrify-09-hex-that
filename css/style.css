@@ -26,14 +26,13 @@ html {
 @media only screen and (max-width: 600px) {
     html {
         font-size: 16px;
-        color: #f08080;
     }
 }
 
 .color-div {
     display: flex;
     padding: 1rem;
-    margin: 1rem;
+    margin: 0.5rem 0;
 }
 
 .hex-p {

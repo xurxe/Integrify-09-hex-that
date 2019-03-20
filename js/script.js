@@ -37,6 +37,20 @@ hexButton.addEventListener('mouseout', function() {
     hexButton.style.transition = 'all 0.5s ease';
 });
 
+hexButton.addEventListener('focus', function() {
+    backgroundColor = generateRandomColor();
+    hexButton.style.background = backgroundColor;
+    hexButton.style.color = formatHsl(pickContrastingFont(backgroundColor));
+    hexButton.style.transition = 'all 0.5s ease';
+});
+
+// when hovering the copy buttons, do the following:
+hexButton.addEventListener('blut', function() {
+    hexButton.style.background = 'white';
+    hexButton.style.color = 'black';
+    hexButton.style.transition = 'all 0.5s ease';
+});
+
 const hexes = [
     'animal abusers',
     'boredom',
@@ -69,6 +83,7 @@ const hexes = [
     'soil erosion',
     'the haters',
     'the patriarchy',
+    'toxic masculinity',
     'transmisogyny',
     'transphobia',
     'trauma',
@@ -293,13 +308,20 @@ function generateDivs(number) {
         copyDiv.className = 'copy-div';
         colorDiv.appendChild(copyDiv);
 
-        // create colorP, give class name, append to copyDiv
-        let colorP = document.createElement('p');
-        colorP.className = 'color-p';
-        copyDiv.appendChild(colorP);
+        // create colorText, give class name, append to copyDiv
+        let colorText = document.createElement('textarea');
+        colorText.className = 'color-text';
+        copyDiv.appendChild(colorText);
 
-        // pass background color as textContent of colorP
-        colorP.textContent = backgroundColor;
+        // style colorText
+        colorText.disabled = true;
+        colorText.style.background = backgroundColor;
+        colorText.style.color = fontColor;
+        colorText.style.height = '2rem';
+        colorText.style.lineHeight = '2rem'
+
+        // pass background color as textContent of colorText
+        colorText.textContent = backgroundColor;
 
         // create copyButton, give class name, append to copyDiv
         let copyButton = document.createElement('button');
@@ -307,7 +329,7 @@ function generateDivs(number) {
         copyDiv.appendChild(copyButton);
 
         // style copy button
-        copyButton.textContent = `copy!`;
+        copyButton.textContent = 'copy!';
         copyButton.style.background = 'none';
         copyButton.style.color = fontColor;
         copyButton.style.fontSize = '0.8rem';
@@ -323,12 +345,29 @@ function generateDivs(number) {
             copyButton.style.transition = 'all 0.5s ease';
         });
 
-        // when hovering the copy buttons, do the following:
         copyButton.addEventListener('mouseout', function() {
             copyButton.style.background = 'none';
             copyButton.style.color = fontColor;
             copyButton.style.transition = 'all 0.5s ease';
         });
+
+        copyButton.addEventListener('focus', function() {
+            copyButton.style.background = fontColor;
+            copyButton.style.color = backgroundColor;
+            copyButton.style.transition = 'all 0.5s ease';
+        });
+
+        copyButton.addEventListener('blur', function() {
+            copyButton.style.background = 'none';
+            copyButton.style.color = fontColor;
+            copyButton.style.transition = 'all 0.5s ease';
+        });
+
+        copyButton.addEventListener('click', function() {
+            colorText.select();
+            document.execCommand('copy');
+        });
+
     };
 };
 

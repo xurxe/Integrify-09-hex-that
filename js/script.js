@@ -11,15 +11,15 @@ for (let i = 0; i < inputTextFields.length; i++) {
 const colorInput = document.querySelector('#color-input');
 colorInput.style.width = '100%';
 
-const hexInput = document.querySelector('#hex-input');
-hexInput.style.width = '100%';
+/* const hexInput = document.querySelector('#hex-input');
+hexInput.style.width = '100%'; */
 
 
 // select and style buttons
 const hexButton = document.querySelector('#hex-button');
 hexButton.style.fontSize = '1rem';
 hexButton.style.height = '4.5rem';
-hexButton.style.margin = '1.5rem 0';
+hexButton.style.margin = '0 0 1rem';
 hexButton.style.padding = '0 1rem';
 hexButton.style.width = '100%';
 
@@ -45,7 +45,7 @@ hexButton.addEventListener('focus', function() {
 });
 
 // when hovering the copy buttons, do the following:
-hexButton.addEventListener('blut', function() {
+hexButton.addEventListener('blur', function() {
     hexButton.style.background = 'white';
     hexButton.style.color = 'black';
     hexButton.style.transition = 'all 0.5s ease';
@@ -392,6 +392,12 @@ hexButton.addEventListener('click', function() {
 
     // get number of colors to be generated from the input field
     const number = colorInput.value;
+
+    if (!(number > 0) || !(number < 101)) {
+        colorInput.value = "";
+        colorInput.placeholder = "Please enter a valid number."
+        return false;
+    };
 
     // remove previous color divs
     clearColorDivs();

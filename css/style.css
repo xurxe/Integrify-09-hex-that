@@ -2,7 +2,7 @@
 
 * {
     box-sizing: border-box;
-    font-family: sans-serif;
+    font-family: 'B612 Mono', monospace;
     margin: 0;
     padding: 0;
     scroll-behavior: smooth;
@@ -15,6 +15,9 @@
 
 html {
     font-size: 20px;
+    background-color: black;
+    color: white;
+
 }
 
 @media only screen and (min-width: 600px) and (max-width: 900px) {
@@ -29,6 +32,80 @@ html {
     }
 }
 
+h1 {
+    font-family: 'Major Mono Display', monospace;
+    font-size: 5.15rem;
+    padding-left: 0.2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin: 2rem 0 4rem;
+}
+
+@media only screen and (min-width: 300px) and (max-width: 600px) {
+    h1 {
+        font-size: calc(32px + (82.4 - 32) * (100vw - 300px) / (600 - 300));
+    }
+
+    h2 {
+        font-size: calc(16px + (24 - 16) * (100vw - 300px) / (600 - 300));
+    }
+}
+
+@media only screen and (max-width: 300px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1rem;
+    }
+}
+
+
+
+
+/* HEADER ******************************************************************* */
+header {
+    text-align: center;
+    margin: 2rem 1rem;
+}
+
+
+
+/* INPUT ******************************************************************** */
+.input {
+    border: none;
+}
+
+input[type="text"] { /* doesn't transition back from focus/hover */
+    border: 2px solid white;
+    transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+}
+
+input[type="text"]:focus, input[type="text"]:hover {
+    background: none;
+    border: 2px solid white;
+    color: white;
+    outline: none;
+    transition: background 0.5s ease;
+    -moz-transition: background 0.5s ease;
+    -o-transition: background 0.5s ease;
+    -webkit-transition: background 0.5s ease;
+}
+
+#hex-button {
+    border: 2px solid white;
+    outline: none;
+}
+
+
+/* RESULTS ****************************************************************** */
+
 .color-div {
     align-items: center;
     display: flex;
@@ -37,6 +114,71 @@ html {
     margin: 0.5rem 0;
 }
 
+@media only screen and (max-width: 600px) {
+    .color-div {
+        flex-direction: column;
+    }
+}
+
 .hex-p {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+    .hex-p {
+        padding-bottom: 1rem;
+    }
+}
+
+.color-p {
+    display: inline-block;
+}
+
+.copy-button {
+    border: none;
+    outline: none;
+}
+
+
+/* FOOTER ******************************************************************* */
+
+footer a {
+    color: grey;
+    display: block;
+    font-size: 0.9rem;
+    padding: 3rem 0;
+    text-align: center;
+    transition: color 0.5s ease;
+    -moz-transition: color 0.5s ease;
+    -o-transition: color 0.5s ease;
+    -webkit-transition: color 0.5s ease;
+}
+
+footer a:hover {
+    color: white;
+    transition: color 0.5s ease;
+    -moz-transition: color 0.5s ease;
+    -o-transition: color 0.5s ease;
+    -webkit-transition: color 0.5s ease;
+}
+
+
+
+
+.responsive-padding {
+    padding: 1rem 5rem;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 900px) {
+    .responsive-padding {
+        padding-left: calc(16px + (100 - 16) * (100vw - 600px) / (900 - 600));
+        padding-right: calc(16px + (100 - 16) * (100vw - 600px) / (900 - 600));
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .responsive-padding {
+        padding: 1rem;
+    }
 }

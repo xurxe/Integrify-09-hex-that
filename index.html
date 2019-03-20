@@ -16,38 +16,42 @@
         <meta property="og:url" content=" ">
         <meta name="twitter:card" content="summary_large_image">
 
+        <link href="https://fonts.googleapis.com/css?family=B612+Mono|Major+Mono+Display" rel="stylesheet">
+
         <link href="./css/style.css" rel="stylesheet" />
     </head>
 
     <body>
 
         <header>
-            <h1>Hex that!</h1>
+            <h1>HEX THAT!</h1>
             <h2>hex and color generator</h2>
         </header>
 
         <main>
 
-            <div>
+            <fieldset class="input responsive-padding">
                 <label for= "color-input">
                     How many colors?
                 </label>
-                <input type="text" id="color-input" placeholder="5" required>
-            </div>
+
+                <input type="text" id="color-input" placeholder="3" required>
         
-            <div>
                 <label for= "hex-input">
                     What are you hexing?
                 </label>
-                <input type="text" id="hex-input" placeholder="the patriarchy, racism, climate change">
-            </div>
 
-            <button id="generate-button">Generate!</button>
+                <input type="text" id="hex-input" placeholder="the patriarchy, racism">
+
+                <div></div>
+    
+                <button type="submit" id="hex-button">Hex!</button>
+            </fieldset>
 
         </main>
 
         <footer>
-
+            <a href="https://github.com/xurxe/Integrify-5b-cosmic-density">by Xurxe Toivo García (2019)</a>
         </footer>
 
         <script src="./js/script.js"></script>

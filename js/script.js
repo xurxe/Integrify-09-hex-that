@@ -1,13 +1,47 @@
 const main = document.querySelector('main');
+
+// select and style text fields
+const inputTextFields = document.querySelectorAll('input[type="text"]');
+for (let i = 0; i < inputTextFields.length; i++) {
+    inputTextFields[i].style.fontSize = '1rem';
+    inputTextFields[i].style.margin = '0.2rem 0 1.5rem';
+    inputTextFields[i].style.padding = '0.4rem 0.6rem';
+}
+
 const colorInput = document.querySelector('#color-input');
+colorInput.style.width = '100%';
+
 const hexInput = document.querySelector('#hex-input');
-const generateButton = document.querySelector('#generate-button');
+hexInput.style.width = '100%';
+
+
+// select and style buttons
+const hexButton = document.querySelector('#hex-button');
+hexButton.style.fontSize = '1rem';
+hexButton.style.height = '4.5rem';
+hexButton.style.margin = '1.5rem 0';
+hexButton.style.padding = '0 1rem';
+hexButton.style.width = '100%';
+
+hexButton.addEventListener('mouseover', function() {
+    backgroundColor = generateRandomColor();
+    hexButton.style.background = backgroundColor;
+    hexButton.style.color = formatHsl(pickContrastingFont(backgroundColor));
+    hexButton.style.transition = 'all 0.5s ease';
+});
+
+// when hovering the copy buttons, do the following:
+hexButton.addEventListener('mouseout', function() {
+    hexButton.style.background = 'white';
+    hexButton.style.color = 'black';
+    hexButton.style.transition = 'all 0.5s ease';
+});
+
 const hexes = [
     'animal abusers',
     'boredom',
     'bigotry',
     'colonialism',
-    'compulsory heterosexuality',
     'child molesters',
     'chronic pain',
     'climate change',
@@ -21,14 +55,14 @@ const hexes = [
     'fossil fuels',
     'global warming',
     'homophobes',
-    'institutionalized racism',
+    'racism',
     'loneliness',
     'mass extinction',
     'mental health stigma',
     'misery',
     'nazis',
     'oppression',
-    'pervasive ableism',
+    'ableism',
     'pollution',
     'poverty',
     'sexism',
@@ -234,7 +268,7 @@ function generateDivs(number) {
 
         // create colorDiv, give class name, append to main
         let colorDiv = document.createElement('div');
-        colorDiv.className = 'color-div';
+        colorDiv.className = 'color-div responsive-padding';
         main.appendChild(colorDiv);
 
         // generate background color and style colorDiv
@@ -254,14 +288,47 @@ function generateDivs(number) {
         hex = pickRandomHex(i);
         hexP.textContent = `Hex ${hex}!`;
 
-        // create colorP, give class name, append to colorDiv
+        // create copyDiv, give class name, append to colorDiv
+        let copyDiv = document.createElement('div');
+        copyDiv.className = 'copy-div';
+        colorDiv.appendChild(copyDiv);
+
+        // create colorP, give class name, append to copyDiv
         let colorP = document.createElement('p');
         colorP.className = 'color-p';
-        colorDiv.appendChild(colorP);
+        copyDiv.appendChild(colorP);
 
         // pass background color as textContent of colorP
         colorP.textContent = backgroundColor;
 
+        // create copyButton, give class name, append to copyDiv
+        let copyButton = document.createElement('button');
+        copyButton.className = 'copy-button';
+        copyDiv.appendChild(copyButton);
+
+        // style copy button
+        copyButton.textContent = `copy!`;
+        copyButton.style.background = 'none';
+        copyButton.style.color = fontColor;
+        copyButton.style.fontSize = '0.8rem';
+        copyButton.style.height = '2rem';
+        copyButton.style.margin = '0 0 0 1.5rem';
+        copyButton.style.paddingLeft = '0.2rem';
+        copyButton.style.textAlign = 'center';
+        copyButton.style.width = '4rem';
+
+        copyButton.addEventListener('mouseover', function() {
+            copyButton.style.background = fontColor;
+            copyButton.style.color = backgroundColor;
+            copyButton.style.transition = 'all 0.5s ease';
+        });
+
+        // when hovering the copy buttons, do the following:
+        copyButton.addEventListener('mouseout', function() {
+            copyButton.style.background = 'none';
+            copyButton.style.color = fontColor;
+            copyButton.style.transition = 'all 0.5s ease';
+        });
     };
 };
 
@@ -282,7 +349,7 @@ function clearColorDivs() {
 
 
 // after clicking the generate button, do the following:
-generateButton.addEventListener('click', function() {
+hexButton.addEventListener('click', function() {
 
     // get number of colors to be generated from the input field
     const number = colorInput.value;
@@ -294,11 +361,14 @@ generateButton.addEventListener('click', function() {
     generateDivs(number);
 });
 
-generateDivs(5);
+generateDivs(3);
 
 
 
-/* The code below is a simpler way to choose a contrasting text color. You can delete seven functions from above (hexToRgb(), formatRgb(), rgbToHsl(), formatHsl(), pickContrastingFont(), and generateDivs()), and simply use the two functions below:
+
+
+/* // The code below is a simpler way to choose a contrasting text color. You can delete seven functions from above (hexToRgb(), formatRgb(), rgbToHsl(), formatHsl(), pickContrastingFont(), and generateDivs()), and simply use the two functions below:
+
 
 
 // pick a font color that has enough contrast with the background
@@ -363,5 +433,4 @@ function generateDivs(number) {
         colorP.textContent = backgroundColor;
 
     };
-};
-*/
+}; */

@@ -1,10 +1,10 @@
 # Title
 
-Hex generator
+Hex that!: hex and color generator
 
 ## Demo
 
-Coming soon
+https://xurxe.github.io/Integrify-5c-hex-that/
 
 ## Author
 

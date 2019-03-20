@@ -44,6 +44,27 @@ const hexes = [
 ];
 
 
+
+// pick a random element from the hexes array
+function pickRandomHex(i) {
+    // i will come from the i in the loop on generateDivs()
+    // j is a random index from the array, excluding the items already used and pushed at the end (see below)
+    j = Math.floor(Math.random() * (hexes.length - i));
+
+    // pick a hex with the randomly-generated j index
+    hex = hexes[j];
+
+    // remove that hex from the array
+    hexes.splice(j, 1);
+
+    // add it at the end of the array
+    hexes.push(hex);
+
+    return hex;
+};
+
+
+
 // generate random hex code
 function generateRandomColor() {
     let randomColor = '#' + Math.random().toString(16).substr(2, 6).toUpperCase();
@@ -165,9 +186,6 @@ function pickContrastingFont(hexcode) {
     let backgroundG = backgroundRgb[1];
     let backgroundB = backgroundRgb[2];
 
-    // calculate perceived brigthness with luma formula
-    brightness = 0.2126 * backgroundR + 0.7152 * backgroundG + 0.0722 * backgroundB;
-
     // convert from RGB to HSL
     let backgroundHsl = rgbToHsl(backgroundRgb);
     let backgroundH = backgroundHsl[0];
@@ -184,12 +202,18 @@ function pickContrastingFont(hexcode) {
         H += 360;
     }
 
+    // set same saturation as background color
     S = backgroundS;
+
+    // calculate perceived brigthness with luma formula
+    brightness = 0.2126 * backgroundR + 0.7152 * backgroundG + 0.0722 * backgroundB;
     
+    // if background color has low brightness, pick high luminance for text
     if (brightness < 150) {
         L = 95;
     }
 
+    // if background color has high brightness, pick low luminance for text
     else {
         L = 5;
     };
@@ -202,51 +226,41 @@ function pickContrastingFont(hexcode) {
 
 
 
-// pick a random element from the hexes array
-function pickRandomHex(i) {
-    // i will come from the i in the loop on generateDivs()
-    // j is a random index from the array, excluding the items already used and pushed at the end (see below)
-    j = Math.floor(Math.random() * (hexes.length - i));
-
-    // pick a hex with the randomly-generated j index
-    hex = hexes[j];
-
-    // remove that hex from the array
-    hexes.splice(j, 1);
-
-    // add it at the end of the array
-    hexes.push(hex);
-
-    return hex;
-};
-
-
-
 // generate the given number of divs
 function generateDivs(number) {
+
+    // loop as many times as the input number
     for (let i = 0; i < number; i++) {
+
+        // create colorDiv, give class name, append to main
         let colorDiv = document.createElement('div');
         colorDiv.className = 'color-div';
         main.appendChild(colorDiv);
 
+        // generate background color and style colorDiv
+        let backgroundColor = generateRandomColor();
+        colorDiv.style.background = backgroundColor;
+
+        // generate text color and style colorDiv
+        let fontColor = formatHsl(pickContrastingFont(backgroundColor));
+        colorDiv.style.color = fontColor;
+
+        // create hexP, give class name, append to colorDiv
         let hexP = document.createElement('p');
         hexP.className = 'hex-p';
         colorDiv.appendChild(hexP);
 
+        // pick hex and pass as textContent of hexP
+        hex = pickRandomHex(i);
+        hexP.textContent = `Hex ${hex}!`;
+
+        // create colorP, give class name, append to colorDiv
         let colorP = document.createElement('p');
         colorP.className = 'color-p';
         colorDiv.appendChild(colorP);
 
-        let backgroundColor = generateRandomColor();
-        colorDiv.style.background = backgroundColor;
-
-        let fontColor = formatHsl(pickContrastingFont(backgroundColor));
-        colorDiv.style.color = fontColor;
-
-        hex = pickRandomHex(i);
-        hexP.textContent = `Hex ${hex}!`;
-
-        console.log(fontColor);
+        // pass background color as textContent of colorP
+        colorP.textContent = backgroundColor;
 
     };
 };
@@ -281,3 +295,73 @@ generateButton.addEventListener('click', function() {
 });
 
 generateDivs(5);
+
+
+
+/* The code below is a simpler way to choose a contrasting text color. You can delete seven functions from above (hexToRgb(), formatRgb(), rgbToHsl(), formatHsl(), pickContrastingFont(), and generateDivs()), and simply use the two functions below:
+
+
+// pick a font color that has enough contrast with the background
+function pickContrastingFont(hexcode) {
+    // two digits for each (R, G, B)
+    let rawR = hexcode.slice(1,3);
+    let rawG = hexcode.slice(3,5);
+    let rawB = hexcode.slice(5,7);
+
+    // convert to integer (0-255)
+    let R = parseInt(rawR, 16);
+    let G = parseInt(rawG, 16);
+    let B = parseInt(rawB, 16);
+
+    // if the values of R, G, and B are high, the background color is light, so pick black text
+    if (R + G + B > 400) {
+        return 'black';
+    }
+
+    // if the values of R, G, and B are low, the background color is dark, so pick white text
+    else {
+        return 'white';
+    };
+};
+
+
+
+// generate the given number of divs
+function generateDivs(number) {
+
+    // loop as many times as the input number
+    for (let i = 0; i < number; i++) {
+
+        // create colorDiv, give class name, append to main
+        let colorDiv = document.createElement('div');
+        colorDiv.className = 'color-div';
+        main.appendChild(colorDiv);
+
+        // generate background color and style colorDiv
+        let backgroundColor = generateRandomColor();
+        colorDiv.style.background = backgroundColor;
+
+        // generate text color and style colorDiv
+        let fontColor = pickContrastingFont(backgroundColor);
+        colorDiv.style.color = fontColor;
+
+        // create hexP, give class name, append to colorDiv
+        let hexP = document.createElement('p');
+        hexP.className = 'hex-p';
+        colorDiv.appendChild(hexP);
+
+        // pick hex and pass as textContent of hexP
+        hex = pickRandomHex(i);
+        hexP.textContent = `Hex ${hex}!`;
+
+        // create colorP, give class name, append to colorDiv
+        let colorP = document.createElement('p');
+        colorP.className = 'color-p';
+        colorDiv.appendChild(colorP);
+
+        // pass background color as textContent of colorP
+        colorP.textContent = backgroundColor;
+
+    };
+};
+*/

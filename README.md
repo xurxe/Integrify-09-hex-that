@@ -1,6 +1,6 @@
-# Title
+# Hex that!: hex and color generator
 
-Hex that!: hex and color generator
+Generate random colors and curse your enemies at the same time!
 
 ## Demo
 

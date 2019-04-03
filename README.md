@@ -4,7 +4,7 @@ Generate random colors and curse your enemies at the same time!
 
 ## Demo
 
-https://xurxe.github.io/Integrify-5c-hex-that/
+https://xurxe.github.io/Integrify-09-hex-that/
 
 ## Author
 

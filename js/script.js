@@ -3,6 +3,8 @@ const main = document.querySelector('main');
 // select and style text fields
 const inputTextFields = document.querySelectorAll('input[type="text"]');
 for (let i = 0; i < inputTextFields.length; i++) {
+    inputTextFields[i].style.borderRadius = '0';
+    inputTextFields[i].style.boxShadow = 'none';
     inputTextFields[i].style.fontSize = '1rem';
     inputTextFields[i].style.margin = '0.2rem 0 1.5rem';
     inputTextFields[i].style.padding = '0.4rem 0.6rem';

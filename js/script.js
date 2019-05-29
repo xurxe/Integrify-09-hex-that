@@ -15,22 +15,25 @@ colorInput.style.width = '100%';
 hexInput.style.width = '100%'; */
 
 
+
 // select and style buttons
 const hexButton = document.querySelector('#hex-button');
+hexButton.style.background = 'white';
+hexButton.style.color = 'black';
 hexButton.style.fontSize = '1rem';
 hexButton.style.height = '4.5rem';
 hexButton.style.margin = '0 0 1rem';
 hexButton.style.padding = '0 1rem';
+hexButton.style.transition = 'all 0.5s ease';
 hexButton.style.width = '100%';
 
 hexButton.addEventListener('mouseover', function() {
     backgroundColor = generateRandomColor();
     hexButton.style.background = backgroundColor;
-    hexButton.style.color = formatHsl(pickContrastingFont(backgroundColor));
+    hexButton.style.color = formatHsl(pickContrastingColor(backgroundColor));
     hexButton.style.transition = 'all 0.5s ease';
 });
 
-// when hovering the copy buttons, do the following:
 hexButton.addEventListener('mouseout', function() {
     hexButton.style.background = 'white';
     hexButton.style.color = 'black';
@@ -40,19 +43,20 @@ hexButton.addEventListener('mouseout', function() {
 hexButton.addEventListener('focus', function() {
     backgroundColor = generateRandomColor();
     hexButton.style.background = backgroundColor;
-    hexButton.style.color = formatHsl(pickContrastingFont(backgroundColor));
+    hexButton.style.color = formatHsl(pickContrastingColor(backgroundColor));
     hexButton.style.transition = 'all 0.5s ease';
 });
 
-// when hovering the copy buttons, do the following:
 hexButton.addEventListener('blur', function() {
     hexButton.style.background = 'white';
     hexButton.style.color = 'black';
     hexButton.style.transition = 'all 0.5s ease';
 });
 
-const hexes = [
+let hexes = [
+    'ableism',
     'animal abusers',
+    'anti-vaxxers',
     'boredom',
     'bigotry',
     'colonialism',
@@ -66,6 +70,7 @@ const hexes = [
     'disease',
     'Donald Trump',
     'facists',
+    'fearmongers',
     'fossil fuels',
     'global warming',
     'homophobes',
@@ -76,11 +81,11 @@ const hexes = [
     'misery',
     'nazis',
     'oppression',
-    'ableism',
     'pollution',
     'poverty',
     'sexism',
     'soil erosion',
+    'the Alt right',
     'the haters',
     'the patriarchy',
     'toxic masculinity',
@@ -92,25 +97,41 @@ const hexes = [
     'xenophobia',
 ];
 
+let usedHexes = [];
 
 
-// pick a random element from the hexes array
-function pickRandomHex(i) {
-    // i will come from the i in the loop on generateDivs()
-    // j is a random index from the array, excluding the items already used and pushed at the end (see below)
-    j = Math.floor(Math.random() * (hexes.length - i));
+function pickRandomHex() {
 
-    // pick a hex with the randomly-generated j index
-    hex = hexes[j];
+    // if the hexes array has any items
+    if (hexes.length > 0) {
 
-    // remove that hex from the array
-    hexes.splice(j, 1);
+        // pick a random index 
+        const i = Math.floor(Math.random() * hexes.length);
 
-    // add it at the end of the array
-    hexes.push(hex);
+        // splice out the hex with the random index
+        const hex = hexes.splice(i, 1);
 
-    return hex;
-};
+        // push it to the usedHexes array
+        usedHexes.push(hex);
+
+        // return it
+        return hex;
+    }
+
+    // otherwise...
+    else {
+
+        // add all the used hexes back to the hexes array
+        hexes = usedHexes;
+
+        // and empty the usedHexes array
+        usedHexes = []
+
+        // run function again
+        pickRandomHex();
+    }
+
+}
 
 
 
@@ -226,8 +247,8 @@ function formatHsl(array) {
 
 
 
-// pick a font color that has enough contrast with the background
-function pickContrastingFont(hexcode) {
+// pick a second color that has enough contrast with the background
+function pickContrastingColor(hexcode) {
 
     // convert from hex to RGB
     let backgroundRgb = hexToRgb(hexcode);
@@ -239,7 +260,6 @@ function pickContrastingFont(hexcode) {
     let backgroundHsl = rgbToHsl(backgroundRgb);
     let backgroundH = backgroundHsl[0];
     let backgroundS = backgroundHsl[1];
-    let backgroundL = backgroundHsl[2];
 
     // define variables for text H, S and L
     let H, S, L;
@@ -291,8 +311,8 @@ function generateDivs(number) {
         colorDiv.style.background = backgroundColor;
 
         // generate text color and style colorDiv
-        let fontColor = formatHsl(pickContrastingFont(backgroundColor));
-        colorDiv.style.color = fontColor;
+        let contrastingColor = formatHsl(pickContrastingColor(backgroundColor));
+        colorDiv.style.color = contrastingColor;
 
         // create hexP, give class name, append to colorDiv
         let hexP = document.createElement('p');
@@ -300,7 +320,7 @@ function generateDivs(number) {
         colorDiv.appendChild(hexP);
 
         // pick hex and pass as textContent of hexP
-        hex = pickRandomHex(i);
+        hex = pickRandomHex();
         hexP.textContent = `Hex ${hex}!`;
 
         // create copyDiv, give class name, append to colorDiv
@@ -309,19 +329,15 @@ function generateDivs(number) {
         colorDiv.appendChild(copyDiv);
 
         // create colorText, give class name, append to copyDiv
-        let colorText = document.createElement('textarea');
+        let colorText = document.createElement('p');
         colorText.className = 'color-text';
         copyDiv.appendChild(colorText);
 
         // style colorText
-        colorText.disabled = true;
-        colorText.style.background = backgroundColor;
-        colorText.style.color = fontColor;
-        colorText.style.height = '2rem';
-        colorText.style.lineHeight = '2rem'
+        colorText.style.color = contrastingColor;
 
         // pass background color as textContent of colorText
-        colorText.textContent = backgroundColor;
+        colorText.innerHTML = backgroundColor;
 
         // create copyButton, give class name, append to copyDiv
         let copyButton = document.createElement('button');
@@ -331,7 +347,7 @@ function generateDivs(number) {
         // style copy button
         copyButton.textContent = 'copy!';
         copyButton.style.background = 'none';
-        copyButton.style.color = fontColor;
+        copyButton.style.color = contrastingColor;
         copyButton.style.fontSize = '0.8rem';
         copyButton.style.height = '2rem';
         copyButton.style.margin = '0 0 0 1.5rem';
@@ -340,34 +356,38 @@ function generateDivs(number) {
         copyButton.style.width = '4rem';
 
         copyButton.addEventListener('mouseover', function() {
-            copyButton.style.background = fontColor;
+            copyButton.style.background = contrastingColor;
             copyButton.style.color = backgroundColor;
             copyButton.style.transition = 'all 0.5s ease';
         });
 
         copyButton.addEventListener('mouseout', function() {
             copyButton.style.background = 'none';
-            copyButton.style.color = fontColor;
+            copyButton.style.color = contrastingColor;
             copyButton.style.transition = 'all 0.5s ease';
         });
 
         copyButton.addEventListener('focus', function() {
-            copyButton.style.background = fontColor;
+            copyButton.style.background = contrastingColor;
             copyButton.style.color = backgroundColor;
             copyButton.style.transition = 'all 0.5s ease';
         });
 
         copyButton.addEventListener('blur', function() {
             copyButton.style.background = 'none';
-            copyButton.style.color = fontColor;
+            copyButton.style.color = contrastingColor;
             copyButton.style.transition = 'all 0.5s ease';
         });
 
         copyButton.addEventListener('click', function() {
-            colorText.select();
+            let copiedText = this.parentNode.querySelector('p').innerHTML;
+            let textArea = document.createElement('textarea');
+            document.body.appendChild(textArea);
+            textArea.value = copiedText;
+            textArea.select();
             document.execCommand('copy');
+            textArea.remove();
         });
-
     };
 };
 
@@ -396,7 +416,7 @@ hexButton.addEventListener('click', function() {
     if (!(number > 0) || !(number < 101)) {
         colorInput.value = "";
         colorInput.placeholder = "Please enter a valid number."
-        return false;
+        return;
     };
 
     // remove previous color divs
@@ -412,12 +432,12 @@ generateDivs(3);
 
 
 
-/* // The code below is a simpler way to choose a contrasting text color. You can delete seven functions from above (hexToRgb(), formatRgb(), rgbToHsl(), formatHsl(), pickContrastingFont(), and generateDivs()), and simply use the two functions below:
+/* // The code below is a simpler way to choose a contrasting text color. You can delete seven functions from above (hexToRgb(), formatRgb(), rgbToHsl(), formatHsl(), pickContrastingColor(), and generateDivs()), and simply use the two functions below:
 
 
 
 // pick a font color that has enough contrast with the background
-function pickContrastingFont(hexcode) {
+function pickContrastingColor(hexcode) {
     // two digits for each (R, G, B)
     let rawR = hexcode.slice(1,3);
     let rawG = hexcode.slice(3,5);
@@ -457,8 +477,8 @@ function generateDivs(number) {
         colorDiv.style.background = backgroundColor;
 
         // generate text color and style colorDiv
-        let fontColor = pickContrastingFont(backgroundColor);
-        colorDiv.style.color = fontColor;
+        let contrastingColor = pickContrastingColor(backgroundColor);
+        colorDiv.style.color = contrastingColor;
 
         // create hexP, give class name, append to colorDiv
         let hexP = document.createElement('p');
